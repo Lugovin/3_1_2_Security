@@ -1,0 +1,49 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Add USER</title>
+</head>
+<body>
+<h1>NEW USER</h1>
+<a>Все поля должны быть заполнены!</a>
+<br/>
+<br/>
+
+
+<form th:action="@{/admin/addUser}"
+      th:object="${user}" method="POST">
+    First Name:
+    <input type="text" th:field="*{name}"/>
+    <br/>
+    <br/>
+    Last Name:
+    <input type="text" th:field="*{lastName}"/>
+    <br/>
+    <br/>
+    Email:
+    <input type="text" th:field="*{email}"/>
+    <br/>
+    <br/>
+    PASSWORD:
+    <input type="text" th:field="*{password}"/>
+    <br/>
+    <br/>
+    ROLE ("ADMIN" or "USER"):
+    <input type="text" name="roleString" />
+    <br/>
+    <br/>
+    <input type="submit" value="Create"/>
+</form>
+
+<br/>
+<a th:href="@{/logout}">LOGOUT</a>
+<br/><br/>
+
+<!-- Check if errorMessage is not null and not empty -->
+
+<div th:if="${errorMessage}" th:utext="${errorMessage}"
+     style="color:red;">
+</div>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" >
+<head>
+  <meta charset="UTF-8"/>
+  <title>USER</title>
+</head>
+<body>
+<br/><br/>
+<div th:if="${message}" th:utext="${message}"
+     style="font-size: 30px; color:blueviolet; font-weight: bold;">
+</div>
+<br/>
+
+
+<br/><br/>
+<div>
+  <table border="5">
+    <tr>
+      <th>First Name</th>
+      <th>Password</th>
+      <th>Last Name</th>
+      <th>Email</th>
+      <!--      <th>Roles</th>-->
+
+    </tr>
+    <tr th:object="${user}">
+      <td th:utext="${user.getName}">...</td>
+      <td th:utext="${user.getPassword}">...</td>
+      <td th:utext="${user.getLastName}">...</td>
+      <td th:utext="${user.getEmail}">...</td>
+      <!--      <td th:utext="${user.getStringRoles}">...</td>-->
+    </tr>
+  </table>
+</div>
+<br/><br/>
+<a th:href="@{/logout}">LOGOUT</a>
+<br/><br/>
+</body>
+</html>

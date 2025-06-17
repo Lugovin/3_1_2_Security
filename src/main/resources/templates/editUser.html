@@ -1,0 +1,48 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Edit User</title>
+</head>
+<body>
+<h1>EDIT USER </h1>
+<a>Можете изменить любое из полей, либо все поля сразу.</a>
+<br/>
+<br/>
+
+
+<form th:action="@{/admin/editUser}"
+      th:object="${user}" method="POST">
+
+    <input type="hidden" th:field="*{id}"/>
+
+    CHANGE First Name:
+    <input type="text" th:field="*{name}"/>
+    <br/>
+    <br/>
+    CHANGE Last Name:
+    <input type="text" th:field="*{lastName}"/>
+    <br/>
+    <br/>
+    CHANGE Email:
+    <input type="text" th:field="*{email}"/>
+    <br/>
+    <br/>
+    CHANGE PASSWORD:
+    <input type="text" th:field="*{password}"/>
+    <br/>
+    <br/>
+    <input type="submit" value="EDIT"/>
+</form>
+
+<br/>
+<a th:href="@{/logout}">LOGOUT</a>
+<br/><br/>
+
+<!-- Check if errorMessage is not null and not empty -->
+
+<div th:if="${errorMessage}" th:utext="${errorMessage}"
+     style="color:red;">
+</div>
+</body>
+</html>
