@@ -2,7 +2,6 @@ package org.example._3_1_2_security.Controllers;
 
 
 import jakarta.servlet.http.HttpServletRequest;
-
 import org.example._3_1_2_security.Entity.User;
 import org.example._3_1_2_security.repository.UserRepo;
 import org.example._3_1_2_security.service.UserService;
@@ -41,7 +40,7 @@ public class MainController {
     @PreAuthorize("hasAuthority('ADMIN')")
     public String usersList(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        model.addAttribute("users", userRepository.findAll());
+        model.addAttribute("users", userRepository.findAllWithRoles());
         model.addAttribute("message", authentication.getName());
         return "usersList";
     }
@@ -109,8 +108,8 @@ public class MainController {
     @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     public String showUserPage(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Optional<User> user = userRepository.findByName(authentication.getName());
-        model.addAttribute("user", user.get());
+        User user = userRepository.findByNameWithRoles(authentication.getName());
+        model.addAttribute("user", user);
         model.addAttribute("message", authentication.getName());
         return "user";
     }

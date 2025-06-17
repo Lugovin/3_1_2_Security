@@ -14,8 +14,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 
 @Service
 public class UserService implements UserDetailsService {
@@ -34,19 +32,14 @@ public class UserService implements UserDetailsService {
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<User> user = userRepository.findByName(username);
-        if (user.isPresent()) {
-            return user.get();
-        } else {
-            throw new UsernameNotFoundException(username);
-        }
+        return userRepository.findByNameWithRoles(username);
     }
 
     @Transactional
     public boolean addUser(User user, String roleName) {
         Role newRole = new Role();
-        Optional<User> hasUser = userRepository.findByName(user.getUsername());
-        if (!hasUser.isEmpty()) {
+        User hasUser = userRepository.findByNameWithRoles(user.getUsername());
+        if (!(hasUser == null)) {
             return false;
         }
         for (Role role : roleRepository.findAll()) {

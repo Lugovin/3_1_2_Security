@@ -20,7 +20,7 @@
       <th>Password</th>
       <th>Last Name</th>
       <th>Email</th>
-      <!--      <th>Roles</th>-->
+      <th>Roles</th>
 
     </tr>
     <tr th:object="${user}">
@@ -28,7 +28,7 @@
       <td th:utext="${user.getPassword}">...</td>
       <td th:utext="${user.getLastName}">...</td>
       <td th:utext="${user.getEmail}">...</td>
-      <!--      <td th:utext="${user.getStringRoles}">...</td>-->
+      <td th:utext="${user.getStringRoles}">...</td>
     </tr>
   </table>
 </div>
