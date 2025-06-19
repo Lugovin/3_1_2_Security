@@ -1,4 +1,4 @@
-package org.example._3_1_2_security.Config;
+package org.example._3_1_2_security.config;
 
 
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package org.example._3_1_2_security.Entity;
+package org.example._3_1_2_security.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -18,6 +18,14 @@ public class Role implements GrantedAuthority {
 
     @Column(name = "roleName")
     private String roleName;
+
+    public Long getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(Long roleId) {
+        this.roleId = roleId;
+    }
 
     @ManyToMany(mappedBy = "roles")
     private Set<User> users;

@@ -32,6 +32,17 @@
     <input type="text" th:field="*{password}"/>
     <br/>
     <br/>
+    <b/>
+    <p>
+        <label>Roles:
+            <input type="checkbox" name="roles"
+                   th:each="role : ${roles}"
+                   th:text="${role.roleName}"
+                   th:value="${role.roleId}"
+                   th:field="*{roles}"
+            />
+        </label>
+    </p>
     <input type="submit" value="EDIT"/>
 </form>
 

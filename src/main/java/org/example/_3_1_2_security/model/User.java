@@ -1,4 +1,4 @@
-package org.example._3_1_2_security.Entity;
+package org.example._3_1_2_security.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -8,8 +8,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -26,19 +30,25 @@ public class User implements UserDetails {
     private Long id;
 
     @Column(name = "name")
+    @NotBlank(message = "Имя не может быть пустым")
     private String name;
 
     @Column(name = "password")
+    @NotBlank(message = "Пароль не может быть пустым")
     private String password;
 
     @Column(name = "lastName")
+    @NotBlank(message = "Имя не может быть пустым")
     private String lastName;
 
     @Column(name = "email")
+    @Email
+    @NotEmpty
     private String email;
 
     @ManyToMany(fetch = FetchType.LAZY)
     private Set<Role> roles = new HashSet<>();
+
 
     public User() {
     }

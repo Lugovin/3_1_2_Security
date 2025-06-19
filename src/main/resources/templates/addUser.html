@@ -11,8 +11,7 @@
 <br/>
 
 
-<form th:action="@{/admin/addUser}"
-      th:object="${user}" method="POST">
+<form th:action="@{/admin/addUser}" th:object="${user}" method="POST">
     First Name:
     <input type="text" th:field="*{name}"/>
     <br/>
@@ -27,13 +26,25 @@
     <br/>
     PASSWORD:
     <input type="text" th:field="*{password}"/>
+
     <br/>
+    <b/>
+    <p>
+        <label>Roles:
+            <input type="checkbox" name="roles"
+                   th:each="role : ${roles}"
+                   th:text="${role.roleName}"
+                   th:value="${role.roleId}"
+                   th:field="*{roles}"
+            />
+        </label>
+    </p>
     <br/>
-    ROLE ("ADMIN" or "USER"):
-    <input type="text" name="roleString" />
-    <br/>
-    <br/>
+
     <input type="submit" value="Create"/>
+    <br/>
+    <br/>
+
 </form>
 
 <br/>
@@ -47,3 +58,5 @@
 </div>
 </body>
 </html>
+
+

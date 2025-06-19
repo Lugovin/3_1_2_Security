@@ -1,10 +1,10 @@
-package org.example._3_1_2_security.Config;
+package org.example._3_1_2_security.config;
 
 
 import jakarta.annotation.PostConstruct;
 
-import org.example._3_1_2_security.Entity.Role;
-import org.example._3_1_2_security.Entity.User;
+import org.example._3_1_2_security.model.Role;
+import org.example._3_1_2_security.model.User;
 import org.example._3_1_2_security.repository.RoleRepo;
 import org.example._3_1_2_security.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;

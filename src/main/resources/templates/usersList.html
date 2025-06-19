@@ -12,7 +12,7 @@
 <br/><br/>
 <h1>USERS LIST</h1>
 <br/><br/>
-<a href="admin/addUser">ADD NEW USER</a>
+<a href="admin/addUser?error=false">ADD NEW USER</a>
 
 <br/><br/>
 
@@ -25,7 +25,6 @@
             <th>Last Name</th>
             <th>Email</th>
             <th>Roles</th>
-            <th>Actions</th>
         </tr>
         <tr th:each="user : ${users}">
             <td th:utext="${user.getName}">...</td>
@@ -38,8 +37,10 @@
                 <!--                <a th:href="@{'/usersList/deleteUser/' + ${user.getId}}">delete</a>-->
 
                 <!--                Так пишем, если используем @RequestParam-->
-                <a th:href="@{/admin/editUser(id=${user.getId})}">edit</a>
-                <a th:href="@{/admin/deleteUser(id=${user.getId})}">delete</a>
+                <a th:href="@{/admin/editUser(id=${user.getId},error=false)}">EDIT</a>
+            </td>
+            <td>
+                <a th:href="@{/admin/deleteUser(id=${user.getId})}">DELETE</a>
             </td>
         </tr>
     </table>
