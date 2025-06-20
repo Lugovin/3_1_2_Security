@@ -4,8 +4,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.example._3_1_2_security.model.Role;
 import org.example._3_1_2_security.model.User;
-import org.example._3_1_2_security.repository.RoleRepo;
-import org.example._3_1_2_security.repository.UserRepo;
 import org.example._3_1_2_security.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,15 +22,11 @@ import java.util.List;
 @Controller
 public class MainController {
 
-    private UserRepo userRepository;
     private UserService userService;
-    private RoleRepo roleRepository;
 
     @Autowired
-    public MainController(UserService userService, UserRepo userRepository, RoleRepo roleRepository) {
+    public MainController(UserService userService) {
         this.userService = userService;
-        this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
     }
 
     @GetMapping({"/"})
@@ -44,7 +38,7 @@ public class MainController {
     @PreAuthorize("hasAuthority('ADMIN')")
     public String usersList(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        model.addAttribute("users", userRepository.findAllWithRoles());
+        model.addAttribute("users", userService.findAllUsersWithRoles());
         model.addAttribute("message", authentication.getName());
         return "usersList";
     }
@@ -53,7 +47,7 @@ public class MainController {
     @PreAuthorize("hasAuthority('ADMIN')")
     public String showAddUserPage(Model model) {
         User user = new User();
-        List<Role> roles = roleRepository.findAll();
+        List<Role> roles = userService.findAllRoles();
         model.addAttribute("user", user);
         model.addAttribute("roles", roles);
         return "addUser";
@@ -68,21 +62,21 @@ public class MainController {
             result.getFieldErrors().forEach(error ->
                     errors.append(error.getField() + " - " + error.getDefaultMessage() + ", ")
             );
-            List<Role> roles = roleRepository.findAll();
+            List<Role> roles = userService.findAllRoles();
             model.addAttribute("user", user);
             model.addAttribute("roles", roles);
             model.addAttribute("errorMessage", errors);
             return "addUser";
         }
         if (user.getRoles().size() == 0) {
-            List<Role> roles = roleRepository.findAll();
+            List<Role> roles = userService.findAllRoles();
             model.addAttribute("user", user);
             model.addAttribute("roles", roles);
             model.addAttribute("errorMessage", "Укажите хотя бы одну роль!");
             return "addUser";
         }
         if (!userService.addUser(user)) {
-            List<Role> roles = roleRepository.findAll();
+            List<Role> roles = userService.findAllRoles();
             model.addAttribute("user", user);
             model.addAttribute("roles", roles);
             model.addAttribute("errorMessage", "Такой пользователь существует!");
@@ -94,15 +88,15 @@ public class MainController {
     @GetMapping("/admin/deleteUser")
     @PreAuthorize("hasAuthority('ADMIN')")
     public String deleteUser(@RequestParam Long id) {
-        userRepository.deleteById(id);
+        userService.deleteUserById(id);
         return "redirect:/admin";
     }
 
     @GetMapping("/admin/editUser")
     @PreAuthorize("hasAuthority('ADMIN')")
     public String editUserForm(Model model, @RequestParam Long id) {
-        User oldUser = userRepository.findByNameWithRoles(userRepository.findById(id).get().getName());
-        List<Role> roles = roleRepository.findAll();
+        User oldUser = userService.findUserByNameWithRoles(userService.findUserById(id).getName());
+        List<Role> roles = userService.findAllRoles();
         model.addAttribute("user", oldUser);
         model.addAttribute("roles", roles);
         return "editUser";
@@ -116,14 +110,14 @@ public class MainController {
             result.getFieldErrors().forEach(error ->
                     errors.append(error.getField() + " - " + error.getDefaultMessage() + ", ")
             );
-            List<Role> roles = roleRepository.findAll();
+            List<Role> roles = userService.findAllRoles();
             model.addAttribute("user", user);
             model.addAttribute("roles", roles);
             model.addAttribute("errorMessage", errors);
             return "editUser";
         }
         if (user.getRoles().size() == 0) {
-            List<Role> roles = roleRepository.findAll();
+            List<Role> roles = userService.findAllRoles();
             model.addAttribute("user", user);
             model.addAttribute("roles", roles);
             model.addAttribute("errorMessage", "Укажите хотя бы одну роль!");
@@ -137,7 +131,7 @@ public class MainController {
     @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
     public String showUserPage(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = userRepository.findByNameWithRoles(authentication.getName());
+        User user = userService.findUserByNameWithRoles(authentication.getName());
         model.addAttribute("user", user);
         model.addAttribute("message", authentication.getName());
         return "user";
