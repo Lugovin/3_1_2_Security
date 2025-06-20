@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.example._3_1_2_security.model.Role;
 import org.example._3_1_2_security.model.User;
+import org.example._3_1_2_security.service.RoleService;
 import org.example._3_1_2_security.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,10 +24,13 @@ import java.util.List;
 public class MainController {
 
     private UserService userService;
+    private RoleService roleService;
 
     @Autowired
-    public MainController(UserService userService) {
+    public MainController(UserService userService, RoleService roleService) {
         this.userService = userService;
+        this.roleService = roleService;
+
     }
 
     @GetMapping({"/"})
@@ -47,7 +51,7 @@ public class MainController {
     @PreAuthorize("hasAuthority('ADMIN')")
     public String showAddUserPage(Model model) {
         User user = new User();
-        List<Role> roles = userService.findAllRoles();
+        List<Role> roles = roleService.findAllRoles();
         model.addAttribute("user", user);
         model.addAttribute("roles", roles);
         return "addUser";
@@ -62,21 +66,21 @@ public class MainController {
             result.getFieldErrors().forEach(error ->
                     errors.append(error.getField() + " - " + error.getDefaultMessage() + ", ")
             );
-            List<Role> roles = userService.findAllRoles();
+            List<Role> roles = roleService.findAllRoles();
             model.addAttribute("user", user);
             model.addAttribute("roles", roles);
             model.addAttribute("errorMessage", errors);
             return "addUser";
         }
         if (user.getRoles().size() == 0) {
-            List<Role> roles = userService.findAllRoles();
+            List<Role> roles = roleService.findAllRoles();
             model.addAttribute("user", user);
             model.addAttribute("roles", roles);
             model.addAttribute("errorMessage", "Укажите хотя бы одну роль!");
             return "addUser";
         }
         if (!userService.addUser(user)) {
-            List<Role> roles = userService.findAllRoles();
+            List<Role> roles = roleService.findAllRoles();
             model.addAttribute("user", user);
             model.addAttribute("roles", roles);
             model.addAttribute("errorMessage", "Такой пользователь существует!");
@@ -96,7 +100,7 @@ public class MainController {
     @PreAuthorize("hasAuthority('ADMIN')")
     public String editUserForm(Model model, @RequestParam Long id) {
         User oldUser = userService.findUserByNameWithRoles(userService.findUserById(id).getName());
-        List<Role> roles = userService.findAllRoles();
+        List<Role> roles = roleService.findAllRoles();
         model.addAttribute("user", oldUser);
         model.addAttribute("roles", roles);
         return "editUser";
@@ -110,14 +114,14 @@ public class MainController {
             result.getFieldErrors().forEach(error ->
                     errors.append(error.getField() + " - " + error.getDefaultMessage() + ", ")
             );
-            List<Role> roles = userService.findAllRoles();
+            List<Role> roles = roleService.findAllRoles();
             model.addAttribute("user", user);
             model.addAttribute("roles", roles);
             model.addAttribute("errorMessage", errors);
             return "editUser";
         }
         if (user.getRoles().size() == 0) {
-            List<Role> roles = userService.findAllRoles();
+            List<Role> roles = roleService.findAllRoles();
             model.addAttribute("user", user);
             model.addAttribute("roles", roles);
             model.addAttribute("errorMessage", "Укажите хотя бы одну роль!");

@@ -1,9 +1,7 @@
 package org.example._3_1_2_security.service;
 
 
-import org.example._3_1_2_security.model.Role;
 import org.example._3_1_2_security.model.User;
-import org.example._3_1_2_security.repository.RoleRepo;
 import org.example._3_1_2_security.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -21,14 +19,12 @@ import java.util.List;
 public class UserService implements UserDetailsService {
 
     private UserRepo userRepository;
-    private RoleRepo roleRepository;
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserService(UserRepo userRepository, RoleRepo roleRepository, @Lazy PasswordEncoder passwordEncoder) {
+    public UserService(UserRepo userRepository, @Lazy PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
-        this.roleRepository = roleRepository;
     }
 
     @Transactional(readOnly = true)
@@ -57,11 +53,6 @@ public class UserService implements UserDetailsService {
     @Transactional(readOnly = true)
     public List<User> findAllUsersWithRoles() {
         return userRepository.findAllUsersWithRoles();
-    }
-
-    @Transactional(readOnly = true)
-    public List<Role> findAllRoles() {
-        return roleRepository.findAll();
     }
 
     @Transactional
